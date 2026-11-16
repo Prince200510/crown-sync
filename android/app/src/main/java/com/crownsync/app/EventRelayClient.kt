@@ -18,9 +18,10 @@ import java.util.Collections
 object EventRelayClient {
     private const val TAG = "CrownSyncRelay"
     // Replace with your deployed Vercel URL, e.g. https://crown-sync.vercel.app/api/relayEvent
-    private const val RELAY_URL = "https://YOUR_VERCEL_DOMAIN.vercel.app/api/relayEvent"
+    private const val RELAY_URL = "https://crown-sync-beryl.vercel.app/api/relayEvent"
     private const val PREFS_NAME = "crown_sync_prefs"
     private const val KEY_DEVICE_ID = "device_id"
+    private const val KEY_ID_TOKEN = "id_token"
     private const val KEY_ALLOWED_APPS = "allowed_apps"
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -36,6 +37,18 @@ object EventRelayClient {
     fun getDeviceId(context: Context): String? {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getString(KEY_DEVICE_ID, null)
+    }
+
+    fun saveIdToken(context: Context, idToken: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(KEY_ID_TOKEN, idToken)
+            .apply()
+    }
+
+    fun getIdToken(context: Context): String? {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_ID_TOKEN, null)
     }
 
     fun setAllowedApps(context: Context, packages: Set<String>) {
@@ -67,8 +80,9 @@ object EventRelayClient {
     }
 
     suspend fun relayBlocking(context: Context, payload: Map<String, Any?>): String {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
+        val idToken = getIdToken(context)
+            ?: FirebaseAuth.getInstance().currentUser?.getIdToken(false)?.await()?.token
+        if (idToken.isNullOrBlank()) {
             Log.w(TAG, "Skipping relay: no authenticated Firebase user")
             return "unauthenticated"
         }
@@ -82,8 +96,6 @@ object EventRelayClient {
         val fullPayload = payload.toMutableMap()
         fullPayload["sourceDeviceId"] = deviceId
 
-        val idToken = user.getIdToken(false).await().token
-            ?: throw IllegalStateException("Failed to obtain Firebase ID token")
         val jsonBody = JSONObject(fullPayload).toString()
 
         var attempt = 0

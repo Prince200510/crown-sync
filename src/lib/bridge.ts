@@ -21,7 +21,7 @@ export interface CrownSyncBridgePlugin {
   getInstalledApps(): Promise<{ apps: InstalledApp[] }>;
   getAllowedApps(): Promise<{ packages: string[] }>;
   setAllowedApps(options: { packages: string[] }): Promise<void>;
-  syncAuthConfig(options: { deviceId: string; uid: string }): Promise<void>;
+  syncAuthConfig(options: { deviceId: string; uid: string; idToken: string }): Promise<void>;
   sendTestEvent(): Promise<{ status: string }>;
 }
 

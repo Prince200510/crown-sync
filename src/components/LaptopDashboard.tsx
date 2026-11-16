@@ -145,9 +145,12 @@ export function LaptopDashboard({ user }: Props) {
   return (
     <div className="container">
       <header className="topbar">
-        <div>
-          <h1>Crown Sync</h1>
-          <p className="muted">Signed in as {user.email}</p>
+        <div className="brand">
+          <img src="/logo.png" alt="Crown Sync" className="brand-logo" />
+          <div>
+            <h1>Crown Sync</h1>
+            <p className="muted small">{user.email}</p>
+          </div>
         </div>
         <button className="btn secondary" onClick={() => signOut(auth)}>
           Sign Out

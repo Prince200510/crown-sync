@@ -35,7 +35,10 @@ export function PhoneSetup({ user }: Props) {
   useEffect(() => {
     const deviceId = getOrCreateDeviceId();
     registerAndroidDevice(user.uid)
-      .then(() => CrownSyncBridge.syncAuthConfig({ deviceId, uid: user.uid }))
+      .then(async () => {
+        const idToken = await user.getIdToken();
+        return CrownSyncBridge.syncAuthConfig({ deviceId, uid: user.uid, idToken });
+      })
       .catch((err) => setErrorMsg(err instanceof Error ? err.message : 'Failed to sync device.'));
 
     refreshStatus();
@@ -88,9 +91,12 @@ export function PhoneSetup({ user }: Props) {
   return (
     <div className="container">
       <header className="topbar">
-        <div>
-          <h1>Crown Sync (Phone)</h1>
-          <p className="muted">{user.email}</p>
+        <div className="brand">
+          <img src="/logo.png" alt="Crown Sync" className="brand-logo" />
+          <div>
+            <h1>Crown Sync</h1>
+            <p className="muted small">{user.email}</p>
+          </div>
         </div>
         <button className="btn secondary" onClick={() => signOut(auth)}>
           Sign Out

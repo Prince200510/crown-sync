@@ -157,8 +157,12 @@ class CrownSyncBridgePlugin : Plugin() {
     @PluginMethod
     fun syncAuthConfig(call: PluginCall) {
         val deviceId = call.getString("deviceId")
+        val idToken = call.getString("idToken")
         if (!deviceId.isNullOrBlank()) {
             EventRelayClient.saveDeviceId(context, deviceId)
+        }
+        if (!idToken.isNullOrBlank()) {
+            EventRelayClient.saveIdToken(context, idToken)
         }
         call.resolve()
     }

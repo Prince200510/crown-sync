@@ -45,11 +45,18 @@ export function AuthCard() {
 
   return (
     <div className="card auth-card">
-      <h1>Crown Sync</h1>
-      <p className="muted">
-        Personal Android-to-laptop notification bridge. Sign in with the same account on both
-        devices.
-      </p>
+      <div className="auth-header">
+        <div className="brand">
+          <img src="/logo.png" alt="Crown Sync" className="brand-logo" />
+          <span className="hero-eyebrow">Personal Bridge</span>
+        </div>
+        <h1 className="hero-title">
+          Welcome to <span>Crown Sync</span>
+        </h1>
+        <p className="muted">
+          Sign in with the same account on your Android phone and laptop.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="stack">
         <label className="field">
