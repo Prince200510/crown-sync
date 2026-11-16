@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+functions/node_modules/
+
+# Build outputs
+dist/
+functions/lib/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*service-account*.json
+*firebase-adminsdk*.json
+android/app/google-services.json
+
+# Android signing keys
+*.jks
+*.keystore
+keystore.properties
+
+# Android / Gradle build artifacts
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/.idea/
+*.apk
+*.aab
+
+# Firebase & Vercel local state
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+.vercel/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/

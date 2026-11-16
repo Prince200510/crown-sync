@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/authcard.tsx","./src/components/laptopdashboard.tsx","./src/components/phonesetup.tsx","./src/lib/bridge.ts","./src/lib/device.ts","./src/lib/firebase.ts"],"version":"5.9.3"}
